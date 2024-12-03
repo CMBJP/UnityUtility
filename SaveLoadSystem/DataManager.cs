@@ -40,11 +40,11 @@ public class DataManager : MonoBehaviour
         try
         {
             File.WriteAllText(filePath, json);
-            Debug.Log(typeof(T).Name + " 저장 성공: " + filePath);
+            Debug.Log($"{typeof(T).Name} 저장 성공: {filePath}");
         }
         catch (Exception e)
         {
-            Debug.LogError(typeof(T).Name + " 저장 실패: " + e.Message);
+            Debug.LogError($"{typeof(T).Name} 저장 실패: {e.Message}");
         }
     }
 
@@ -56,7 +56,7 @@ public class DataManager : MonoBehaviour
     {
         if (!File.Exists(filePath))
         {
-            Debug.LogWarning(typeof(T).Name + " 저장 파일이 없습니다. 새 데이터 생성.");
+            Debug.LogWarning($"{typeof(T).Name} 저장 파일이 없습니다. 새 데이터 생성.");
             return new T(); // 파일이 없으면 기본 생성자를 사용해 새 데이터 생성
         }
 
@@ -64,12 +64,12 @@ public class DataManager : MonoBehaviour
         {
             string json = File.ReadAllText(filePath);   // text 모두 읽기
             T data = JsonUtility.FromJson<T>(json);     // 데이터 객체 변환
-            Debug.Log(typeof(T).Name + " 불러오기 성공: " + filePath);
+            Debug.Log($"{typeof(T).Name} 불러오기 성공: {filePath}");
             return data;    // 데이터 객체 반환
         }
         catch (Exception e)
         {
-            Debug.LogError(typeof(T).Name + " 불러오기 실패: " + e.Message);
+            Debug.LogError($"{typeof(T).Name} 불러오기 실패: {e.Message}");
             return new T(); // 오류 발생 시 디폴트 데이터 생성
         }
     }
@@ -82,18 +82,18 @@ public class DataManager : MonoBehaviour
     {
         if (!File.Exists(filePath))
         {
-            Debug.LogWarning("파일이 존재하지 않습니다: " + filePath);
+            Debug.LogWarning($"파일이 존재하지 않습니다: {filePath}");
             return;
         }
 
         try
         {
             File.Delete(filePath);
-            Debug.Log("파일이 삭제되었습니다: " + filePath);
+            Debug.Log($"파일이 삭제되었습니다: {filePath}");
         }
         catch (Exception e)
         {
-            Debug.LogError("파일 삭제 실패: " + e.Message);
+            Debug.LogError($"파일 삭제 실패: {e.Message}");
         }
     }
 
