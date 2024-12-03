@@ -1,0 +1,138 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
+[Serializable]
+public class PlayerData
+{
+    public string name = "HongGilDong";
+    public int level = 1;
+    public string[] items = { "Leather Armor", "Wooden Sword" };
+}
+
+[Serializable]
+public class SkillData
+{
+    public string skillName = "Debug";
+    public string description = "This is a skill used for debugging";
+    public int cost = 0;
+}
+
+[Serializable]
+public class MapData
+{
+    public int mapCode = 0;
+    public string mapName = "Seoul";
+    public string description = "Capital of Korea";
+}
+
+public class Test : MonoBehaviour
+{
+    private PlayerData playerData;
+    private SkillData skillData;
+    private MapData mapData;
+
+    private string playerDataFilePath;
+    private string skillDataFilePath;
+    private string mapDataFilePath;
+
+    void Start()
+    {
+        playerDataFilePath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
+        skillDataFilePath = Path.Combine(Application.persistentDataPath, "SkillData.json");
+        mapDataFilePath = Path.Combine(Application.persistentDataPath, "MapData.json");
+
+        LoadAllData();
+    }
+
+    // 예제
+    private void Update()
+    {
+        // 'L' 키: 모든 데이터 로드
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadAllData();
+        }
+
+        // 'S' 키: 모든 데이터 저장
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SaveAllData();
+        }
+
+        // 'D' 키: 모든 데이터 삭제
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            DeleteAllData();
+        }
+
+        // 'U' 키: 데이터 수정 후 저장
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            UpdateAndSaveData();
+        }
+    }
+
+    private void LoadAllData()
+    {
+        playerData = DataManager.Inst.LoadData<PlayerData>(playerDataFilePath);
+        skillData = DataManager.Inst.LoadData<SkillData>(skillDataFilePath);
+        mapData = DataManager.Inst.LoadData<MapData>(mapDataFilePath);
+
+        DisplayData();
+    }
+
+    private void SaveAllData()
+    {
+        DataManager.Inst.SaveData<PlayerData>(playerData, playerDataFilePath);
+        DataManager.Inst.SaveData<SkillData>(skillData, skillDataFilePath);
+        DataManager.Inst.SaveData<MapData>(mapData, mapDataFilePath);
+
+        Debug.Log("모든 게임 데이터가 저장되었습니다!");
+    }
+
+    public void DeleteAllData()
+    {
+        DataManager.Inst.DeleteData(playerDataFilePath);
+        DataManager.Inst.DeleteData(skillDataFilePath);
+        DataManager.Inst.DeleteData(mapDataFilePath);
+    }
+
+    // 데이터를 업데이트하고 저장하는 예제 메서드
+    public void UpdateAndSaveData()
+    {
+        // PlayerData 수정
+        playerData.name = "JjangSsaeSaRam";
+        playerData.level = 10;
+        playerData.items = new string[] { "Magic Sword", "Dragon Shield" };
+
+        // SkillData 수정
+        skillData.skillName = "Fireball";
+        skillData.description = "A powerful attack.";
+        skillData.cost = 50;
+
+        // MapData 수정
+        mapData.mapCode = 1000;
+        mapData.mapName = "Busan";
+        mapData.description = "Second largest city in Korea.";
+
+        // 데이터 저장
+        SaveAllData();
+    }
+
+    // 불러온 데이터를 콘솔에 출력하는 메서드
+    private void DisplayData()
+    {
+        // PlayerData 출력
+        Debug.Log($"Player Name: {playerData.name}, Level: {playerData.level}");
+        Debug.Log($"Inventory: {string.Join(", ", playerData.items)}");
+
+        // SkillData 출력
+        Debug.Log($"Skill Name: {skillData.skillName}, Description: {skillData.description}, Cost: {skillData.cost}");
+
+        // MapData 출력
+        Debug.Log($"Map Code: {mapData.mapCode}, Map Name: {mapData.mapName}, Description: {mapData.description}");
+    }
+}
